@@ -105,6 +105,10 @@ func Error(msg ...interface{}) {
 	os.Exit(1)
 }
 
+func VarDetails(variable interface{}) string {
+	return fmt.Sprintf("%#v", variable)
+}
+
 func CurrentFunctionName() string {
 	pc, _, _, _ := runtime.Caller(2)
 	return filepath.Base(runtime.FuncForPC(pc).Name())
