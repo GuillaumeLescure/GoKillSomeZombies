@@ -17,7 +17,7 @@ const (
 	logError       = "[E]"
 )
 
-type self struct {
+type pkg struct {
 	color   bool
 	verbose uint
 
@@ -33,7 +33,7 @@ type self struct {
 }
 
 var (
-	this self
+	this pkg
 )
 
 func init() {

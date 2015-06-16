@@ -9,7 +9,7 @@ import (
 )
 
 type (
-	self struct {
+	pkg struct {
 		dataFromFile
 	}
 
@@ -34,7 +34,7 @@ const (
 )
 
 var (
-	this    self
+	this    pkg
 
 	DefaultPath string
 )

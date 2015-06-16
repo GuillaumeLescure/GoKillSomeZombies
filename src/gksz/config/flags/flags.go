@@ -5,7 +5,7 @@ import (
 )
 
 type (
-	self struct {
+	pkg struct {
 		verbose uint
 		color   bool
 	}
@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	this self
+	this pkg
 )
 
 func Parse() {
