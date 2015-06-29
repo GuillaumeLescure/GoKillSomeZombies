@@ -1,7 +1,7 @@
 package userfile
 
 import (
-	"gksz/config/version"
+	"gksz/config"
 	"gksz/base/logs"
 	"encoding/xml"
 	"os"
@@ -87,7 +87,7 @@ func WriteDefaultFile(path string) {
 	}
 	defer file.Close()
 
-	this.dataFromFile = dataFromFile{XMLName:xml.Name{" ", "GoKillSomeZombies"}, Type:"userConfFile", Version:version.Version(), Name:DefaultName, Mail:DefaultMail, Width:DefaultWidth, Height:DefaultHeight, FullScreen:DefaultFullScreen}
+	this.dataFromFile = dataFromFile{XMLName:xml.Name{" ", "GoKillSomeZombies"}, Type:"userConfFile", Version:config.Version(), Name:DefaultName, Mail:DefaultMail, Width:DefaultWidth, Height:DefaultHeight, FullScreen:DefaultFullScreen}
 	xmlToWrite, err := xml.MarshalIndent(this.dataFromFile, "", "    ")
 	if err != nil {
 		logs.Error(err)

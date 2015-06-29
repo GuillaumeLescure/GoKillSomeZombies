@@ -1,11 +1,11 @@
-package version
+package config
 
 import (
 	"strconv"
 )
 
 type (
-	self struct {
+	pkgV struct {
 		version string
 	}
 )
@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	this    self
+	this    pkgV
 )
 
 func init() {
