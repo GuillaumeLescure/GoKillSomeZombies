@@ -36,6 +36,8 @@ var (
 	this pkg
 )
 
+//----------> Package's functions <----------
+
 func init() {
 	this.loggerDebug = log.New(os.Stdout, logDebug + " ", log.Ldate|log.Ltime)
 	this.loggerInformation = log.New(os.Stdout, logInformation + " ", log.Ldate|log.Ltime)

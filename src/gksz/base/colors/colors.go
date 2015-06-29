@@ -39,6 +39,8 @@ const (
 	reset     = begin + "0" + end
 )
 
+//----------> Package's functions <----------
+
 func StringColored(style Style, foregroundColor Color, backgroundColor Color, msg string) string {
 	return begin + strconv.FormatUint((uint64)(style), 10) + separator + strconv.FormatUint(30+(uint64)(foregroundColor), 10) + separator + strconv.FormatUint(30+(uint64)(foregroundColor), 10) + end + msg + reset
 }

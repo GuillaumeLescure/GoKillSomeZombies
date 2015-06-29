@@ -20,6 +20,8 @@ var (
 	this pkg
 )
 
+//----------> Package's functions <----------
+
 func Parse() {
 	flag.UintVar(&this.verbose, "v", DefaultVerboseLevel, "verbose mode (0 to 3)")
 	flag.BoolVar(&this.color, "c", DefaultColor, "color mode (true or false)")
