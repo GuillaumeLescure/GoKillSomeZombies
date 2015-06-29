@@ -5,7 +5,7 @@ import (
 	"gksz/config/flags"
 	"gksz/config/userfile"
 	"gksz/game"
-	"gksz/sdlcustom"
+	"gksz/idlcustom"
 )
 
 func main() {
@@ -15,10 +15,10 @@ func main() {
 
 	userfile.ReadOrCreateFile(userfile.DefaultPath)
 
-	sdlcustom.InitSDL()
+	idlcustom.InitSDL()
 	defer sdl.Quit()
 
-	win := sdlcustom.CreateMainWindow()
+	win := idlcustom.CreateMainWindow()
 	defer win.Destroy()
 	for game.IsRunning == true {
 		event := sdl.WaitEvent()
