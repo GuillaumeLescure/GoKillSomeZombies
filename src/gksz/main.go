@@ -6,6 +6,7 @@ import (
 	"gksz/config/userfile"
 	"gksz/game"
 	"gksz/idlcustom"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func main() {
@@ -20,6 +21,12 @@ func main() {
 
 	win := idlcustom.CreateMainWindow()
 	defer win.Destroy()
+
+	err := win.Update()
+	if err != nil {
+		logs.Error(err)
+	}
+
 	for game.IsRunning == true {
 		event := sdl.WaitEvent()
 		logs.Debug("event received: ", logs.VarDetails(event))

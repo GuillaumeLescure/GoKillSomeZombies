@@ -1,31 +1,73 @@
 package idl
 
 import (
-	"errors"
-	"strconv"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type (
-	MainWindow struct {
-		*sdl.Window
+	MainWindower interface {
+		UiBaser
 
-		children []*WidgetDrawer
+		Window() *sdl.Window
+		Renderer() *sdl.Renderer
+		WindowManager() *WindowManager
+		Destroy()
+		Update() error
+	}
+
+	MainWindow struct {
+		UiBase
+
+		win *sdl.Window
+		renderer *sdl.Renderer
+		wm WindowManager
 	}
 )
 
 //----------> Package's functions <----------
 
 func NewMainWindow(title string, x uint, y uint, w uint, h uint, flags uint32) (*MainWindow, error) {
-	if CanCreateMainWindow() == true {
-		SetCurrentMainWindowNumber(CurrentMainWindowNumber() + 1)
-		win, err := sdl.CreateWindow(title, int(x), int(y), int(w), int(h), flags)
+	newWin, err := sdl.CreateWindow(title, int(x), int(y), int(w), int(h), flags)
+	if err != nil {
+		return nil, err
+	} else {
+		newRenderer, err := sdl.CreateRenderer(newWin, -1, sdl.RENDERER_ACCELERATED)
 		if err != nil {
 			return nil, err
-		} else {
-			return &MainWindow{Window: win}, nil
+		}
+		return &MainWindow{UiBase: *NewUiBase(), win: newWin, renderer: newRenderer}, nil
+	}
+}
+
+func (self *MainWindow)Window() *sdl.Window {
+	return self.win
+}
+
+func (self *MainWindow)Renderer() *sdl.Renderer {
+	return self.renderer
+}
+
+func (self *MainWindow)WindowManager() *WindowManager {
+	return &self.wm
+}
+
+func (self *MainWindow)Destroy() {
+	self.win.Destroy()
+	self.renderer.Destroy()
+}
+
+func (self *MainWindow) Update() error {
+	if err := self.renderer.Clear(); err != nil {
+		return err
+	}
+
+	size := len(self.children)
+	for c := 0; c < size; c++ {
+		if err := self.children[c].Draw(); err != nil {
+			return err
 		}
 	}
 
-	return nil, errors.New("limit of MainWindow are reached (max=" + strconv.Itoa(MainWindowLimit()) + ")")
+	self.renderer.Present()
+	return nil
 }

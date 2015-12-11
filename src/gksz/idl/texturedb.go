@@ -8,25 +8,30 @@ import (
 )
 
 type (
-	pkgSDB struct {
-		surfaces map[string]*sdl.Surface
+	pkgTDB struct {
+		textures map[string]*sdl.Texture
+		renderer *sdl.Renderer
 	}
 )
 
 var (
-	thisSDB pkgSDB
+	thisTDB pkgTDB
 )
 
 // ----------> Package's functions <----------
 
 func init() {
-	thisSDB.surfaces = make(map[string]*sdl.Surface)
+	thisTDB.textures = make(map[string]*sdl.Texture)
+}
+
+func SetRenderer(newRenderer *sdl.Renderer) {
+	thisTDB.renderer = newRenderer
 }
 
 func Load(path string) error {
-	surface, err := img.Load(path)
+	surface, err := img.LoadTexture(thisTDB.renderer, path)
 	if err == nil {
-		thisSDB.surfaces[path] = surface
+		thisTDB.textures[path] = surface
 	}
 	return err
 }
@@ -57,10 +62,10 @@ func LoadFolder(path string) (uint, error) {
 }
 
 func Unload(path string) bool {
-	_, ok := thisSDB.surfaces[path]
+	_, ok := thisTDB.textures[path]
 	if ok == true {
-		thisSDB.surfaces[path].Free()
-		delete(thisSDB.surfaces, path)
+		thisTDB.textures[path].Destroy()
+		delete(thisTDB.textures, path)
 		return true
 	}
 
@@ -74,7 +79,7 @@ func UnloadFolder(pathFolder string) uint {
 		pathFolder = pathFolder + "/"
 	}
 
-	for pathSurface := range thisSDB.surfaces {
+	for pathSurface := range thisTDB.textures {
 		if strings.Index(pathSurface, pathFolder) == 0 {
 			Unload(pathSurface)
 			nbrUnloaded++
@@ -85,11 +90,11 @@ func UnloadFolder(pathFolder string) uint {
 }
 
 func UnloadAll() {
-	for pathSurface := range thisSDB.surfaces {
+	for pathSurface := range thisTDB.textures {
 		Unload(pathSurface)
 	}
 }
 
-func GetSurface(path string) *sdl.Surface {
-	return thisSDB.surfaces[path]
+func GetSurface(path string) *sdl.Texture {
+	return thisTDB.textures[path]
 }

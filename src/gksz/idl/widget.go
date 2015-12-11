@@ -5,75 +5,90 @@ import (
 )
 
 type (
-	Focuser interface {
-		SetFocus(bool)
+	Widgeter interface {
+		MainWindow() MainWindower
+		Parent() UiBaser
+		SetParent(UiBaser)
+		Position() *Coordinate
+		MoveTo(*Coordinate)
+		Move(*Vector)
+		TextureEnable() *sdl.Texture
+		SetTextureEnable(*sdl.Texture)
+		TextureDisable() *sdl.Texture
+		SetTextureDisable(*sdl.Texture)
 		Focus() bool
-	}
-
-	Enabler interface {
-		SetEnable(bool)
+		SetFocus(bool)
 		Enable() bool
-	}
-
-	Visibler interface {
-		SetVisible(bool)
+		SetEnable(bool)
 		Visible() bool
-	}
-
-	Drawer interface {
+		SetVisible(bool)
+		Contains(Coordinate) bool
+		ClickAt(Coordinate)
 		Draw() error
 	}
 
-	WidgetDrawer interface {
-		Focuser
-		Enabler
-		Visibler
-		Drawer
-	}
-
 	Widget struct {
-		WidgetDrawer
+		UiBase
 
-		parent   *WidgetDrawer
-		children []*Widget
-
+		mainWindow MainWindower
+		parent   UiBaser
 		position Coordinate
 		size     Dimension
 		focus    bool
 		enable   bool
 		visible  bool
-
-		surfaceEnable  *sdl.Surface
-		surfaceDisable *sdl.Surface
-		currentSurface *sdl.Surface
+		textureEnable  *sdl.Texture
+		textureDisable *sdl.Texture
+		currentTexture *sdl.Texture
 	}
 )
 
 const (
-	DefaultChildrenSize uint = 3
 	DefaultFocus        bool = false
 	DefaultEnable       bool = true
 	DefaultVisible      bool = true
 )
 
+
 // ----------> Package's functions <----------
 
-func NewWidget(newParent *WidgetDrawer, newPos *Coordinate, newSize *Dimension, newSurfaceEnable *sdl.Surface, newSurfaceDisable *sdl.Surface) *Widget {
-	widget := &Widget{parent: newParent, position: *newPos, size: *newSize, surfaceEnable: newSurfaceEnable, surfaceDisable: newSurfaceDisable}
-	widget.children = make([]*Widget, 0, DefaultChildrenSize)
+func NewWidget(newParent UiBaser, newPos *Coordinate, newSize *Dimension, newTextureEnable *sdl.Texture, newTextureDisable *sdl.Texture) *Widget {
+	widget := &Widget{UiBase: *NewUiBase(), parent: newParent, position: *newPos, size: *newSize, textureEnable: newTextureEnable, textureDisable: newTextureDisable}
 	widget.SetFocus(DefaultFocus)
 	widget.SetEnable(DefaultEnable)
 	widget.SetVisible(DefaultVisible)
+	widget.mainWindow = searchMainWindower(newParent)
+
+	widget.mainWindow.WindowManager().AddWindow(widget)
+
 	return widget
 }
 
-// ----------> Widget's methods <----------
+func searchMainWindower(base UiBaser) MainWindower {
+	for true {
+		if win, ok := base.(*MainWindow); ok == true {
+			return win
+		} else if wid, ok := base.(*Widget); ok == true {
+			base = wid.Parent()
+		} else {
+			panic("base is not a MainWindow nor a Widget")
+		}
+	}
+	panic("MainWindow not found")
+}
 
-func (self *Widget) Parent() *WidgetDrawer {
+
+// ----------> Widgeter's methods <----------
+
+func (self *Widget) MainWindow() MainWindower {
+	return self.mainWindow
+}
+
+func (self *Widget) Parent() UiBaser {
 	return self.parent
 }
 
-func (self *Widget) SetParent(newParent *WidgetDrawer) {
+func (self *Widget) SetParent(newParent UiBaser) {
 	self.parent = newParent
 }
 
@@ -99,23 +114,21 @@ func (self *Widget) Move(newVector *Vector) {
 	self.position.Y += newVector.Y
 }
 
-func (self *Widget) SurfaceEnable() *sdl.Surface {
-	return self.surfaceEnable
+func (self *Widget) TextureEnable() *sdl.Texture {
+	return self.textureEnable
 }
 
-func (self *Widget) SetSurfaceEnable(newSurfaceEnable *sdl.Surface) {
-	self.surfaceEnable = newSurfaceEnable
+func (self *Widget) SetTextureEnable(newTextureEnable *sdl.Texture) {
+	self.textureEnable = newTextureEnable
 }
 
-func (self *Widget) SurfaceDisable() *sdl.Surface {
-	return self.surfaceDisable
+func (self *Widget) TextureDisable() *sdl.Texture {
+	return self.textureDisable
 }
 
-func (self *Widget) SetSurfaceDisable(newSurfaceDisable *sdl.Surface) {
-	self.surfaceDisable = newSurfaceDisable
+func (self *Widget) SetTextureDisable(newTextureDisable *sdl.Texture) {
+	self.textureDisable = newTextureDisable
 }
-
-// ----------> WidgetDrawer's methods <----------
 
 func (self *Widget) Focus() bool {
 	return self.focus
@@ -132,9 +145,9 @@ func (self *Widget) Enable() bool {
 func (self *Widget) SetEnable(newEnable bool) {
 	self.enable = newEnable
 	if self.enable == true {
-		self.currentSurface = self.surfaceEnable
+		self.currentTexture = self.textureEnable
 	} else {
-		self.currentSurface = self.surfaceDisable
+		self.currentTexture = self.textureDisable
 	}
 }
 
@@ -146,16 +159,25 @@ func (self *Widget) SetVisible(newVisible bool) {
 	self.visible = newVisible
 	if self.visible == true {
 		if self.enable == true {
-			self.currentSurface = self.surfaceEnable
+			self.currentTexture = self.textureEnable
 		} else {
-			self.currentSurface = self.surfaceDisable
+			self.currentTexture = self.textureDisable
 		}
 	} else {
-		self.currentSurface = nil
+		self.currentTexture = nil
 	}
 }
 
-func (self *Widget) Draw(surface *sdl.Surface) error {
-	return self.currentSurface.Blit(nil, surface,
+func (self *Widget) Contains(point Coordinate) bool {
+	return point.X >= self.position.X && point.X <= (self.position.X + self.size.Width) &&
+		point.Y >= self.position.Y && point.Y <= (self.position.Y + self.size.Height)
+}
+
+func (self *Widget) ClickAt(point Coordinate) {
+	
+}
+
+func (self *Widget) Draw() error {
+	return self.mainWindow.Renderer().Copy(self.currentTexture, nil,
 		&sdl.Rect{X: int32(self.position.X), Y: int32(self.position.Y), W: int32(self.position.X + self.size.Width), H: int32(self.position.Y + self.size.Height)})
 }

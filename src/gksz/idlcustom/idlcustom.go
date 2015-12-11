@@ -19,7 +19,7 @@ func InitSDL() {
 }
 
 func CreateMainWindow() *idl.MainWindow {
-	flags := uint32(sdl.WINDOW_SHOWN | sdl.WINDOW_INPUT_GRABBED)
+	flags := uint32(sdl.WINDOW_SHOWN/* | sdl.WINDOW_INPUT_GRABBED*/)
 	if (userfile.FullScreen() == true) {
 //		flags |= sdl.WINDOW_FULLSCREEN
 	}

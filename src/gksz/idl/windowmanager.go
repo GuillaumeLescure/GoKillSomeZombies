@@ -1,43 +1,41 @@
 package idl
 
 type (
-	pkgWM struct {
-		mainWindowLimit         int
-		currentMainWindowNumber int
+	WindowManager struct {
+		windowsStack   []*Widget
 	}
 )
 
-const (
-	DefaultMainWindowLimit int = 1
-	UnlimitedMainWindow int = -1
-)
 
-var (
-	thisWM pkgWM
-)
+// ----------> Package's functions <----------
 
-//----------> Package's functions <----------
-
-func init() {
-	thisWM.mainWindowLimit = DefaultMainWindowLimit
+func NewWindowManager() *WindowManager {
+	return &WindowManager{}
 }
 
-func MainWindowLimit() int {
-	return thisWM.mainWindowLimit
+
+// ----------> WindowManager's functions <----------
+
+func (self *WindowManager) Stack() []*Widget {
+	return self.windowsStack
 }
 
-func SetMainWindowLimit(newMainWindowLimit int) {
-	thisWM.mainWindowLimit = newMainWindowLimit
+func (self *WindowManager) AddWindow(win *Widget) {
+	self.windowsStack = append([]*Widget{win}, self.windowsStack...)
+
+	self.windowsStack[1].SetFocus(false)
+	self.windowsStack[0].SetFocus(true)
 }
 
-func CurrentMainWindowNumber() int {
-	return thisWM.currentMainWindowNumber
-}
+func (self *WindowManager) ClickAt(point Coordinate) {
+	for key, widget := range self.windowsStack {
+		if widget.Visible() == true && widget.Contains(point) == true {
+			self.windowsStack = append(self.windowsStack[:key], self.windowsStack[key + 1:]...)
+			self.AddWindow(widget)
 
-func SetCurrentMainWindowNumber(newCurrentMainWindowNumber int) {
-	thisWM.currentMainWindowNumber = newCurrentMainWindowNumber
-}
-
-func CanCreateMainWindow() bool {
-	return thisWM.currentMainWindowNumber < thisWM.mainWindowLimit
+			widget.SetFocus(true)
+			widget.ClickAt(point)
+			break
+		}
+	}
 }
