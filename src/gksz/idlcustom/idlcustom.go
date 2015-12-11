@@ -12,15 +12,21 @@ const (
 )
 
 func InitSDL() {
+	logs.Debug(logs.CurrentFunctionName() + "()")
+
 	err := sdl.Init(sdl.INIT_EVERYTHING)
 	if err != nil {
 		logs.Error(err)
 	}
+
+	logs.Debug(logs.CurrentFunctionName() + " -- end")
 }
 
 func CreateMainWindow() *idl.MainWindow {
+	logs.Debug(logs.CurrentFunctionName() + "()")
+
 	flags := uint32(sdl.WINDOW_SHOWN/* | sdl.WINDOW_INPUT_GRABBED*/)
-	if (userfile.FullScreen() == true) {
+	if userfile.FullScreen() == true {
 //		flags |= sdl.WINDOW_FULLSCREEN
 	}
 
@@ -29,5 +35,6 @@ func CreateMainWindow() *idl.MainWindow {
 		logs.Error(err)
 	}
 
+	logs.Debug(logs.CurrentFunctionName() + " -- end with " + logs.VarDetails(win))
 	return win
 }

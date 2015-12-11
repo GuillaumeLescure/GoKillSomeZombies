@@ -18,9 +18,11 @@ func main() {
 
 	idlcustom.InitSDL()
 	defer sdl.Quit()
+	logs.Information("SDL is initialized")
 
 	win := idlcustom.CreateMainWindow()
 	defer win.Destroy()
+	logs.Information("MainWindow is created")
 
 	err := win.Update()
 	if err != nil {
