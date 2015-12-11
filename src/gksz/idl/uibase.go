@@ -34,14 +34,14 @@ func (self *UiBase) ToMainWindower() MainWindower {
 	if res, ok := UiBaser(self).(*MainWindow); ok {
 		return res
 	}
-	
+
 	return nil
 }
 
-func (self *UiBase)ToWidgeter() Widgeter {
+func (self *UiBase) ToWidgeter() Widgeter {
 	if res, ok := UiBaser(self).(*Widget); ok {
 		return res
 	}
-	
+
 	return nil
 }

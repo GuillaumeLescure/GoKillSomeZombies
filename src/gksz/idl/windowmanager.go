@@ -2,17 +2,15 @@ package idl
 
 type (
 	WindowManager struct {
-		windowsStack   []*Widget
+		windowsStack []*Widget
 	}
 )
-
 
 // ----------> Package's functions <----------
 
 func NewWindowManager() *WindowManager {
 	return &WindowManager{}
 }
-
 
 // ----------> WindowManager's functions <----------
 
@@ -30,7 +28,7 @@ func (self *WindowManager) AddWindow(win *Widget) {
 func (self *WindowManager) ClickAt(point Coordinate) {
 	for key, widget := range self.windowsStack {
 		if widget.Visible() == true && widget.Contains(point) == true {
-			self.windowsStack = append(self.windowsStack[:key], self.windowsStack[key + 1:]...)
+			self.windowsStack = append(self.windowsStack[:key], self.windowsStack[key+1:]...)
 			self.AddWindow(widget)
 
 			widget.SetFocus(true)

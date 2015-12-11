@@ -11,13 +11,13 @@ type (
 )
 
 const (
-	MajorVersion    uint    = 0
-	MinorVersion    uint    = 1
-	BuildVersion    uint    = 0
+	MajorVersion uint = 0
+	MinorVersion uint = 1
+	BuildVersion uint = 0
 )
 
 var (
-	this    pkgV
+	this pkgV
 )
 
 func init() {

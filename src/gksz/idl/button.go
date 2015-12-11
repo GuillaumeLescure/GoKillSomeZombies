@@ -7,7 +7,7 @@ import (
 type (
 	Button struct {
 		Widget
-		
+
 		textureHover *sdl.Texture
 		textureClick *sdl.Texture
 	}

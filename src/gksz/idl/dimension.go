@@ -2,7 +2,7 @@ package idl
 
 type (
 	Dimension struct {
-		Width uint
+		Width  uint
 		Height uint
 	}
 )
@@ -10,5 +10,5 @@ type (
 //----------> Package's functions <----------
 
 func NewDimension(newWidth uint, newHeight uint) *Dimension {
-	return &Dimension{Width:newWidth, Height:newHeight}
+	return &Dimension{Width: newWidth, Height: newHeight}
 }

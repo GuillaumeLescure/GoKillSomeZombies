@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/veandco/go-sdl2/sdl"
 	"gksz/base/logs"
 	"gksz/config/flags"
 	"gksz/config/userfile"
 	"gksz/game"
 	"gksz/idlcustom"
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 func main() {
@@ -32,8 +32,8 @@ func main() {
 		logs.Debug("event received: ", logs.VarDetails(event))
 
 		switch event.(type) {
-			case *sdl.QuitEvent :
-				game.IsRunning = false;
+		case *sdl.QuitEvent:
+			game.IsRunning = false
 		}
 	}
 }

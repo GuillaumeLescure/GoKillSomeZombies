@@ -1,19 +1,19 @@
 package idlcustom
 
 import (
+	"github.com/veandco/go-sdl2/sdl"
 	"gksz/base/logs"
 	"gksz/config/userfile"
 	"gksz/idl"
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	WindowName string  = "GoKillSomeZombies"
+	WindowName string = "GoKillSomeZombies"
 )
 
 func InitSDL() {
 	err := sdl.Init(sdl.INIT_EVERYTHING)
-	if (err != nil) {
+	if err != nil {
 		logs.Error(err)
 	}
 }

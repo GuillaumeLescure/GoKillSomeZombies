@@ -30,13 +30,13 @@ type (
 	Widget struct {
 		UiBase
 
-		mainWindow MainWindower
-		parent   UiBaser
-		position Coordinate
-		size     Dimension
-		focus    bool
-		enable   bool
-		visible  bool
+		mainWindow     MainWindower
+		parent         UiBaser
+		position       Coordinate
+		size           Dimension
+		focus          bool
+		enable         bool
+		visible        bool
 		textureEnable  *sdl.Texture
 		textureDisable *sdl.Texture
 		currentTexture *sdl.Texture
@@ -44,11 +44,10 @@ type (
 )
 
 const (
-	DefaultFocus        bool = false
-	DefaultEnable       bool = true
-	DefaultVisible      bool = true
+	DefaultFocus   bool = false
+	DefaultEnable  bool = true
+	DefaultVisible bool = true
 )
-
 
 // ----------> Package's functions <----------
 
@@ -76,7 +75,6 @@ func searchMainWindower(base UiBaser) MainWindower {
 	}
 	panic("MainWindow not found")
 }
-
 
 // ----------> Widgeter's methods <----------
 
@@ -169,12 +167,12 @@ func (self *Widget) SetVisible(newVisible bool) {
 }
 
 func (self *Widget) Contains(point Coordinate) bool {
-	return point.X >= self.position.X && point.X <= (self.position.X + self.size.Width) &&
-		point.Y >= self.position.Y && point.Y <= (self.position.Y + self.size.Height)
+	return point.X >= self.position.X && point.X <= (self.position.X+self.size.Width) &&
+		point.Y >= self.position.Y && point.Y <= (self.position.Y+self.size.Height)
 }
 
 func (self *Widget) ClickAt(point Coordinate) {
-	
+
 }
 
 func (self *Widget) Draw() error {

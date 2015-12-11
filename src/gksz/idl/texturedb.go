@@ -1,10 +1,10 @@
 package idl
 
 import (
-	"io/ioutil"
-	"strings"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/sdl_image"
+	"io/ioutil"
+	"strings"
 )
 
 type (

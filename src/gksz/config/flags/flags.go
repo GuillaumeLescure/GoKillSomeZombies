@@ -13,7 +13,7 @@ type (
 
 const (
 	DefaultVerboseLevel uint = 1
-	DefaultColor bool = true
+	DefaultColor        bool = true
 )
 
 var (

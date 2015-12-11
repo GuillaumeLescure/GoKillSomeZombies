@@ -18,9 +18,9 @@ type (
 	MainWindow struct {
 		UiBase
 
-		win *sdl.Window
+		win      *sdl.Window
 		renderer *sdl.Renderer
-		wm WindowManager
+		wm       WindowManager
 	}
 )
 
@@ -39,19 +39,19 @@ func NewMainWindow(title string, x uint, y uint, w uint, h uint, flags uint32) (
 	}
 }
 
-func (self *MainWindow)Window() *sdl.Window {
+func (self *MainWindow) Window() *sdl.Window {
 	return self.win
 }
 
-func (self *MainWindow)Renderer() *sdl.Renderer {
+func (self *MainWindow) Renderer() *sdl.Renderer {
 	return self.renderer
 }
 
-func (self *MainWindow)WindowManager() *WindowManager {
+func (self *MainWindow) WindowManager() *WindowManager {
 	return &self.wm
 }
 
-func (self *MainWindow)Destroy() {
+func (self *MainWindow) Destroy() {
 	self.win.Destroy()
 	self.renderer.Destroy()
 }

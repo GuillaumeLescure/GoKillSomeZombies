@@ -1,9 +1,9 @@
 package userfile
 
 import (
-	"gksz/config"
-	"gksz/base/logs"
 	"encoding/xml"
+	"gksz/base/logs"
+	"gksz/config"
 	"os"
 	"path/filepath"
 )
@@ -14,27 +14,27 @@ type (
 	}
 
 	dataFromFile struct {
-		XMLName    xml.Name  `xml:"GoKillSomeZombies"`
-		Type       string    `xml:"type,attr"`
-		Version    string    `xml:"version,attr"`
-		Name       string    `xml:"user>name"`
-		Mail       string    `xml:"user>mail"`
-		Width      uint      `xml:"preferences>screenResolution>width"`
-		Height     uint      `xml:"preferences>screenResolution>height"`
-		FullScreen bool      `xml:"preferences>fullScreen"`
+		XMLName    xml.Name `xml:"GoKillSomeZombies"`
+		Type       string   `xml:"type,attr"`
+		Version    string   `xml:"version,attr"`
+		Name       string   `xml:"user>name"`
+		Mail       string   `xml:"user>mail"`
+		Width      uint     `xml:"preferences>screenResolution>width"`
+		Height     uint     `xml:"preferences>screenResolution>height"`
+		FullScreen bool     `xml:"preferences>fullScreen"`
 	}
 )
 
 const (
-	DefaultName string = "???"
-	DefaultMail string = "???"
-	DefaultWidth uint = 1024
-	DefaultHeight uint = 768
-	DefaultFullScreen bool = true
+	DefaultName       string = "???"
+	DefaultMail       string = "???"
+	DefaultWidth      uint   = 1024
+	DefaultHeight     uint   = 768
+	DefaultFullScreen bool   = true
 )
 
 var (
-	this    pkg
+	this pkg
 
 	DefaultPath string
 )
@@ -43,7 +43,7 @@ func init() {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		logs.Error(err)
-    }
+	}
 	DefaultPath = dir + "/.gksz.conf"
 }
 
@@ -64,7 +64,7 @@ func LoadFile(path string) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		logs.Error(err);
+		logs.Error(err)
 	}
 	defer file.Close()
 
@@ -83,11 +83,11 @@ func WriteDefaultFile(path string) {
 
 	file, err := os.Create(path)
 	if err != nil {
-		logs.Error(err);
+		logs.Error(err)
 	}
 	defer file.Close()
 
-	this.dataFromFile = dataFromFile{XMLName:xml.Name{" ", "GoKillSomeZombies"}, Type:"userConfFile", Version:config.Version(), Name:DefaultName, Mail:DefaultMail, Width:DefaultWidth, Height:DefaultHeight, FullScreen:DefaultFullScreen}
+	this.dataFromFile = dataFromFile{XMLName: xml.Name{" ", "GoKillSomeZombies"}, Type: "userConfFile", Version: config.Version(), Name: DefaultName, Mail: DefaultMail, Width: DefaultWidth, Height: DefaultHeight, FullScreen: DefaultFullScreen}
 	xmlToWrite, err := xml.MarshalIndent(this.dataFromFile, "", "    ")
 	if err != nil {
 		logs.Error(err)
@@ -95,7 +95,7 @@ func WriteDefaultFile(path string) {
 
 	_, err = file.Write(xmlToWrite)
 	if err != nil {
-		logs.Error(err);
+		logs.Error(err)
 	}
 
 	logs.Information("Default configuration file is written at '" + path + "'")
