@@ -112,7 +112,7 @@ func VarDetails(variable interface{}) string {
 }
 
 func CurrentFunctionName() string {
-	pc, _, _, _ := runtime.Caller(2)
+	pc, _, _, _ := runtime.Caller(1)
 	return filepath.Base(runtime.FuncForPC(pc).Name())
 }
 
